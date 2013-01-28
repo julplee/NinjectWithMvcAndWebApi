@@ -76,7 +76,6 @@ ipch/
 # Visual Studio profiler
 *.psess
 *.vsp
-*.suo
 
 # ReSharper is a .NET coding add-in
 _ReSharper*
