@@ -7,12 +7,21 @@ using System.Web.Http;
 
 namespace NinjectWithMvcAndWebApi.Controllers
 {
-    public class ValuesController : ApiController
+    using NinjectWithMvcAndWebApi.Models;
+
+    public class UsersController : ApiController
     {
-        // GET api/values
-        public IEnumerable<string> Get()
+        private IUserService userService;
+
+        public UsersController(IUserService userService)
         {
-            return new string[] { "value1", "value2" };
+            this.userService = userService;
+        }
+
+        // GET api/values
+        public IEnumerable<User> Get()
+        {
+            return userService.GetUsers();
         }
 
         // GET api/values/5
