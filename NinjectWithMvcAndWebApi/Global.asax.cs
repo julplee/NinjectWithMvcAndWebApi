@@ -9,6 +9,10 @@ using System.Web.Routing;
 
 namespace NinjectWithMvcAndWebApi
 {
+    using Ninject;
+
+    using NinjectWithMvcAndWebApi.Models;
+
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
@@ -22,6 +26,26 @@ namespace NinjectWithMvcAndWebApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            IKernel kernel = new StandardKernel();
+            RegisterServices(kernel);
+
+            // Create resolver for MVC controllers
+            NinjectMvcDependencyResolver ninjectMvcDependencyResolver = new NinjectMvcDependencyResolver(kernel);
+            DependencyResolver.SetResolver(ninjectMvcDependencyResolver);
+
+            // Create resolver for WebApi controllers
+            NinjectWebApiDependencyResolver ninjectWebApiDependencyResolver = new NinjectWebApiDependencyResolver(kernel);
+            GlobalConfiguration.Configuration.DependencyResolver = ninjectWebApiDependencyResolver;
         }
+
+        /// <summary>
+        /// Load your modules or register your services here!
+        /// </summary>
+        /// <param name="kernel">The kernel.</param>
+        public static void RegisterServices(IKernel kernel)
+        {
+            kernel.Bind<IUserService>().To<UserService>();
+        }  
     }
 }
